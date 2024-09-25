@@ -8,12 +8,14 @@ from sklearn.linear_model import LinearRegression
 def preprocess_prod_data(prod_df):
     """
     Written for productivity data; will drop null values and 
-    split into training and testing sets. Uses actual_productivity
+    split into training and testing sets. Uses pm2.5
     as the target column.
     """
     df = prod_df.dropna()
-    X = pd.get_dummies(df.drop(columns='actual_productivity'))
-    y = df['actual_productivity'].values.reshape(-1, 1)
+    X = pd.get_dummies(df.drop(columns='pm2.5'))
+  
+    y = df['pm2.5'].values.reshape(-1, 1)
+    print('1')
     return train_test_split(X, y)
 
 def r2_adj(x, y, model):
@@ -21,6 +23,7 @@ def r2_adj(x, y, model):
     Calculates adjusted r-squared values given an X variable, 
     predicted y values, and the model used for the predictions.
     """
+  
     r2 = model.score(x,y)
     n = x.shape[0]
     p = y.shape[1]
@@ -50,7 +53,7 @@ def prod_model_generator(prod_df):
 
     # Use the pipeline to make predictions
     y_pred = pipeline.predict(X_test)
-
+    print('2')
     mse = mean_squared_error(y_test, y_pred)
     r2_value = r2_score(y_test, y_pred)
     r2_adj_value = r2_adj(X_test, y_test, pipeline)
